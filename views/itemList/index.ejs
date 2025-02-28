@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Items</title>
+    <link rel="icon" type="image/png" href="/IMAGES/notebook.png">
+    <link rel="stylesheet" href="/CSS/page_one.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>All Items</h1>
+        
+        <!-- Add New Item Button -->
+        <a href="/itemList/new" class="nav-btn">Add New Item</a>
+        <br>
+
+        <% if (itemList.length > 0) { %>
+            <% for (let item of itemList) { %>
+                <div class="list-item <%= item.completed ? 'completed' : '' %>">
+                    <!-- Checkbox for Completing Item -->
+                    <div class="checkbox-container">
+                        <input type="checkbox" class="completed-checkbox" data-id="<%= item._id %>" <%= item.completed ? 'checked' : '' %>>
+                        <label class="checkbox-label">Item Completed</label>
+                    </div>
+
+                    <!-- Item Name with Multi-line Formatting -->
+                    <pre class="item-text"><%= item.name %></pre>
+
+                    <!-- Buttons -->
+                    <div class="button-container">
+                        <form action="/itemList/<%= item._id %>?_method=DELETE" method="POST">
+                            <button type="submit" class="btn">Delete</button>
+                        </form>
+                        <button onclick="location.href='/itemList/<%= item._id %>/edit'" class="btn edit-btn">Edit</button>
+                    </div>
+                </div>
+            <% } %>
+        <% } else { %>
+            <p>No items available.</p>
+        <% } %>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".completed-checkbox").forEach(checkbox => {
+                checkbox.addEventListener("change", async function () {
+                    const itemId = this.getAttribute("data-id");
+                    const completed = this.checked;
+
+                    try {
+                        const response = await fetch(`/itemList/${itemId}/complete`, {
+                            method: "PUT",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ completed })
+                        });
+
+                        if (!response.ok) {
+                            throw new Error("Failed to update item");
+                        }
+
+                        
+                        const listItem = this.closest(".list-item");
+                        if (completed) {
+                            listItem.classList.add("completed");
+                        } else {
+                            listItem.classList.remove("completed");
+                        }
+
+                    } catch (error) {
+                        console.error("Error updating item:", error);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

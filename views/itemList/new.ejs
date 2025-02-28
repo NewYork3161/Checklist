@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Item</title>
+    <link rel="icon" type="image/png" href="/IMAGES/notebook.png">
+    <link rel="stylesheet" href="/CSS/page_one.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Add a New Item</h1>
+        
+        <form action="/itemList" method="POST">
+            <label for="name">Item Name</label>
+            <textarea  maxlength="50" name="name" id="name" required></textarea>
+            
+            <button type="submit">Add Item</button>
+        </form>
+        
+        <a href="/itemList">View All Items</a>
+    </div>
+</body>
+</html>
